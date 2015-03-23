@@ -20,10 +20,8 @@ int main(void){
     int buf, err;
 
     mStack_t operators;
-    mStack_t operands;
 
     stack_init(&operators);
-    stack_init(&operands);
 
     printf("Please entered a postfix expression:\n");
 
