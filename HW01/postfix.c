@@ -1,25 +1,26 @@
 /*========================================================================
  *  Copyright (c) 2015 sonicyang
  *
- *  This file is part of Postfix.
+ *  This file is part of Bus.
  *
- *  Postfix is free software: you can redistribute it and/or modify
+ *  Bus is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 2 of the License, or
  *  (at your option) any later version.
 
- *  Postfix is distributed in the hope that it will be useful,
+ *  Bus is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
 
  *  You should have received a copy of the GNU General Public License
- *  along with Postfix.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with Bus.  If not, see <http://www.gnu.org/licenses/>.
 =========================================================================*/
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 
 typedef struct mStack{
     int buffer[1024];
@@ -38,9 +39,9 @@ int main(void){
     char *ptr;
     int buf, err;
 
-    mStack_t operators;
+    mStack_t operands;
 
-    stack_init(&operators);
+    stack_init(&operands);
 
     printf("Please entered a postfix expression:\n");
 
@@ -72,16 +73,25 @@ int main(void){
                     err = 1;
                 stack_push(&operands, stack_pop(&operands) / stack_pop(&operands));
                 break;
-            default:
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
                 sscanf(process_buffer, "%d", &buf);
                 stack_push(&operands, buf);
                 break;
+            default:
+                err = 1;
+                break;
         }
 
-        while(*ptr != ' ' && *ptr != '\0'){
-            ptr++;
-        }
-        ptr++;
+        ptr += strlen(process_buffer) + 1;
 
     }while(*ptr != '\0');
     
